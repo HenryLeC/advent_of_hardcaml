@@ -1,8 +1,27 @@
 (executables
  (modes byte exe)
  (names generate)
- (libraries core.command core_unix.command_unix core core_unix hardcaml
-   hardcaml_demo_project jane_rope)
+ (libraries
+  core.command
+  core_unix.command_unix
+  core
+  core_unix
+  hardcaml
+  hardcaml_demo_project
+  jane_rope)
  (preprocess
   (pps ppx_jane))
  (promote))
+
+(executables
+ (modes byte exe)
+ (names test_div_mod)
+ (libraries
+  core.command
+  core_unix.command_unix
+  core
+  core_unix
+  hardcaml
+  hardcaml_demo_project
+  hardcaml_waveterm
+  jane_rope))
