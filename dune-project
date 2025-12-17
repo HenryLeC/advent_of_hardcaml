@@ -1,9 +1,9 @@
 (lang dune 3.17)
 
-(name hardcaml_day1)
+(name advent_of_hardcaml)
 
 (package
- (name hardcaml_day1)
+ (name advent_of_hardcaml)
  (depends
   (ocaml
    (>= 4.14))

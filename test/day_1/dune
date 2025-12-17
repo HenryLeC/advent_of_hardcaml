@@ -1,0 +1,27 @@
+(executables
+ (public_names day1_div_mod)
+ (modes byte exe)
+ (names test_div_mod)
+ (libraries
+  core.command
+  core_unix.command_unix
+  core
+  core_unix
+  hardcaml
+  hardcaml_day1
+  hardcaml_waveterm
+  jane_rope))
+
+(executables
+ (public_names day1_soln)
+ (modes byte exe)
+ (names test_advent_soln)
+ (libraries
+  core.command
+  core_unix.command_unix
+  core
+  core_unix
+  hardcaml
+  hardcaml_day1
+  hardcaml_waveterm
+  jane_rope))

@@ -8,3 +8,5 @@ _opam
 
 dune.lock
 dev-tools.locks
+
+*.vcd

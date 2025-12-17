@@ -1,0 +1,20 @@
+opam-version: "2.0"
+maintainer: "Henry LeCompte <henry@lunar-glass.com>"
+authors: ["Henry LeCompte <henry@lunar-glass.com>"]
+homepage: "https://github.com/henrylec/advent_of_hardcaml"
+bug-reports: "https://github.com/henrylec/advent_of_hardcaml/issues"
+dev-repo: "git+https://github.com/henrylec/advent_of_hardcaml.git"
+doc: "https://github.com/henrylec/advent_of_hardcaml"
+license: "MIT"
+build: [
+  ["dune" "build" "-p" name "-j" jobs]
+]
+depends: [
+  "ocaml" {>= "5.1.0"}
+  "dune" {>= "3.17.0"}
+]
+available: arch != "arm32" & arch != "x86_32"
+synopsis: "Advent of Code solutions implemented in Hardcaml"
+description: "
+Advent of Code solutions implemented in Hardcaml. I have never written Hardcaml or Ocaml before this so don't take anything in here as best practice
+"

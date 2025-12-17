@@ -4,9 +4,8 @@ open! Bits
 open! Signal
 
 let partial_sub (a : Signal.t) (b : Signal.t) =
-  let width = Signal.width a in
-  let res = mux2 (a <+ of_int ~width 0) (a +: b) (a -: b) in
-  mux2 (a <+ b &: (a >+ of_int ~width 0)) a res
+  let res = mux2 (a <+. 0) (a +: b) (a -: b) in
+  mux2 (a <+ b &: (a >=+. 0)) a res
 ;;
 
 let sub_counter_reg spec first a b =
@@ -14,9 +13,12 @@ let sub_counter_reg spec first a b =
   let modulo_w = wire width_a -- "running_modulo" in
   let mod_or_a = mux2 first a modulo_w in
   let divisor_w = wire width_a -- "running_divisor" in
+  let divisor_w_or_0 = mux2 first (Signal.of_int ~width:width_a 0) divisor_w in
   let modulo = partial_sub mod_or_a b -- "modulo_next" in
   let modulo_r = reg spec ~enable:vdd modulo in
-  let divisor_r = reg spec (mux2 (modulo <>: mod_or_a) (divisor_w +:. 1) divisor_w) in
+  let divisor_r =
+    reg spec (mux2 (modulo <>: mod_or_a) (divisor_w_or_0 +:. 1) divisor_w_or_0)
+  in
   let valid_r = reg spec (mux2 (modulo <>: mod_or_a) gnd vdd) in
   modulo_w <== modulo_r;
   divisor_w <== divisor_r;

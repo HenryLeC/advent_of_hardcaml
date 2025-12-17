@@ -37,7 +37,9 @@ let test a_in b_in =
   waves, modulo, divisor, !valid
 ;;
 
-let waves, modulo, divisor, valid = test (of_int ~width:5 7) (Bits.of_int ~width:5 3);;
+let waves, modulo, divisor, valid =
+  test (of_int ~width:16 100) (Bits.of_int ~width:16 100)
+;;
 
 Stdio.printf
   "modulo: %i divisor: %i valid %b\n"
