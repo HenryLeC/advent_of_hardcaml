@@ -5,3 +5,6 @@ _opam
 
 *.exe
 *.bc
+
+dune.lock
+dev-tools.locks

@@ -1,1 +1,17 @@
 (lang dune 3.17)
+
+(name hardcaml_day1)
+
+(package
+ (name hardcaml_day1)
+ (depends
+  (ocaml
+   (>= 4.14))
+  (hardcaml
+   (>= 0.17))
+  (ppx_hardcaml
+   (>= 0.17))
+  (hardcaml_waveterm
+   (>= 0.17))
+  (jane_rope
+   (>= 0.17))))
