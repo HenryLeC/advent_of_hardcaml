@@ -15,7 +15,7 @@ let testbench
       (Calculate_joltage.calculate_joltage scope)
   in
   let waves, sim = Waveform.create sim in
-  let out = Out_channel.create "/home/henrylec/waves.vcd" in
+  let out = Out_channel.create "../../../../../../out/waves.vcd" in
   let sim = Vcd.wrap out sim in
   let inputs = Cyclesim.inputs sim in
   let outputs = Cyclesim.outputs sim in

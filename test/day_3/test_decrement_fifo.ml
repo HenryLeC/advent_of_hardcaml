@@ -15,7 +15,7 @@ let testbench
       (Decrement_fifo.hierarchical scope "test_instance")
   in
   let waves, sim = Waveform.create sim in
-  let out = Out_channel.create "/home/henrylec/fifo.vcd" in
+  let out = Out_channel.create "../../../../../../out/fifo.vcd" in
   let sim = Vcd.wrap out sim in
   let inputs = Cyclesim.inputs sim in
   let outputs = Cyclesim.outputs sim in

@@ -13,7 +13,7 @@ let testbench (test : Sim.t -> t ref Day3_soln.I.t -> t ref Day3_soln.O.t -> uni
       (Day3_soln.hierarchical scope "test_soln")
   in
   let waves, sim = Waveform.create sim in
-  let out = Out_channel.create "/home/henrylec/day3.vcd" in
+  let out = Out_channel.create "../../../../../../out/day3.vcd" in
   let sim = Vcd.wrap out sim in
   let inputs = Cyclesim.inputs sim in
   let outputs = Cyclesim.outputs sim in
