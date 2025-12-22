@@ -1,0 +1,4 @@
+(executable
+ (name debug_day3)
+ (public_name debug_day3)
+ (libraries hardcaml_day3 hardcaml_waveterm hardcaml_waveterm.interactive))

@@ -19,13 +19,14 @@ let testbench (test : Sim.t -> t ref Bank_mem.I.t -> t ref Bank_mem.O.t -> unit)
 let%expect_test "write_one_test" =
   testbench (fun sim inputs outputs ->
     inputs.write_lsp := Bits.of_int ~width:4 5;
-    inputs.read_idx := Bits.of_int ~width:4 1;
+    inputs.read_idx := Bits.of_int ~width:4 11;
     inputs.write_mask := Bits.of_int ~width:12 3;
     Printf.printf
       "Output: %d Output_prev: %d\n"
       (Bits.to_int !(outputs.read_val))
       (Bits.to_int !(outputs.read_prev_val));
     Cyclesim.cycle sim;
+    inputs.write_lsp := Bits.of_int ~width:4 7;
     Printf.printf
       "Output: %d Output_prev: %d\n"
       (Bits.to_int !(outputs.read_val))
@@ -38,26 +39,26 @@ let%expect_test "write_one_test" =
   [%expect
     {|
     Output: 0 Output_prev: 0
-    Output: 0 Output_prev: 5
-    Output: 5 Output_prev: 5
+    Output: 5 Output_prev: 0
+    Output: 7 Output_prev: 5
     ┌Signals────────┐┌Waves──────────────────────────────────────────────┐
     │clock          ││┌───┐   ┌───┐   ┌───┐   ┌───┐   ┌───┐   ┌───┐   ┌──│
     │               ││    └───┘   └───┘   └───┘   └───┘   └───┘   └───┘  │
     │               ││────────────────────────                           │
-    │read_idx       ││ 1                                                 │
+    │read_idx       ││ B                                                 │
     │               ││────────────────────────                           │
-    │               ││────────────────────────                           │
-    │write_lsp      ││ 5                                                 │
-    │               ││────────────────────────                           │
+    │               ││────────┬───────────────                           │
+    │write_lsp      ││ 5      │7                                         │
+    │               ││────────┴───────────────                           │
     │               ││────────────────────────                           │
     │write_mask     ││ 003                                               │
     │               ││────────────────────────                           │
-    │               ││────────┬───────────────                           │
-    │read_prev_val  ││ 0      │5                                         │
-    │               ││────────┴───────────────                           │
     │               ││────────────────┬───────                           │
-    │read_val       ││ 0              │5                                 │
+    │read_prev_val  ││ 0              │5                                 │
     │               ││────────────────┴───────                           │
+    │               ││────────┬───────┬───────                           │
+    │read_val       ││ 0      │5      │7                                 │
+    │               ││────────┴───────┴───────                           │
     │               ││                                                   │
     └───────────────┘└───────────────────────────────────────────────────┘
     |}]

@@ -15,7 +15,13 @@ module I : sig
 end
 
 module O : sig
-  type 'a t = { front_val : 'a [@bits 4] } [@@deriving hardcaml]
+  type 'a t =
+    { front_val : 'a [@bits 4]
+    ; empty : 'a
+    ; front_idx : 'a [@bits 4]
+    ; back_idx : 'a [@bits 4]
+    }
+  [@@deriving hardcaml]
 end
 
 val hierarchical : Scope.t -> string -> t I.t -> t O.t

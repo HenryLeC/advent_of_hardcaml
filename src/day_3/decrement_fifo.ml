@@ -15,7 +15,13 @@ module I = struct
 end
 
 module O = struct
-  type 'a t = { front_val : 'a [@bits 4] } [@@deriving hardcaml]
+  type 'a t =
+    { front_val : 'a [@bits 4]
+    ; empty : 'a
+    ; front_idx : 'a [@bits 4]
+    ; back_idx : 'a [@bits 4]
+    }
+  [@@deriving hardcaml]
 end
 
 let decrement_fifo (_scope : Scope.t) (inputs : t I.t) =
@@ -50,7 +56,7 @@ let decrement_fifo (_scope : Scope.t) (inputs : t I.t) =
   for idx = 0 to size - 1 do
     update_lines.(idx)
     <== mux2
-          (inputs.write_enable &&: back_idx ==:. idx)
+          (inputs.write_enable &: (back_idx ==:. idx))
           (* If we are writing to the buffer and are one past the end *)
           inputs.write_data
           (* Put in the data to write *)
@@ -59,7 +65,7 @@ let decrement_fifo (_scope : Scope.t) (inputs : t I.t) =
   done;
   let front_data = Signal.wire 4 in
   front_data <== mux front_idx @@ Array.to_list mem;
-  { O.front_val = front_data }
+  { O.front_val = front_data; empty = back_idx ==: front_idx; front_idx; back_idx }
 ;;
 
 let hierarchical (scope : Scope.t) instance (input : t I.t) =
