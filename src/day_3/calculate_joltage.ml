@@ -77,6 +77,7 @@ let calculate_joltage (scope : Scope.t) (inputs : t I.t) =
   let ready = Always.Variable.reg spec ~width:1 ~enable:vdd in
   let valid_out = Always.Variable.reg spec ~width:1 ~enable:vdd in
   let sm = Always.State_machine.create (module States) ~enable:vdd spec in
+  let overwrote_final = Always.Variable.wire ~default:gnd in
   let bcd_input =
     { Bcd_to_binary.I.clock = inputs.clock
     ; clear = inputs.start
@@ -122,7 +123,7 @@ let calculate_joltage (scope : Scope.t) (inputs : t I.t) =
                   [ (* If the buffer is empty we just want to replace the last element *)
                     when_
                       (inputs.char_data >: bank_mem.read_val)
-                      [ bank_write_mask <-- one 12 ]
+                      [ bank_write_mask <-- one 12; overwrote_final <-- vdd ]
                   ]
                   [ (* Otherwise we definitely want to shift our value into the end *)
                     (let mask = log_shift srl (ones 12) (inc_pairs.front_val -:. 1) in
@@ -132,9 +133,21 @@ let calculate_joltage (scope : Scope.t) (inputs : t I.t) =
                   ; check_increasing <-- vdd
                   ]
               ; if_
-                  (inputs.char_data >: bank_mem.read_val)
-                  [ pairs_write_data <-- of_int 11 ~width:4; pairs_write_enable <-- vdd ]
-                  [ pairs_write_enable <-- gnd ]
+                  overwrote_final.value
+                  [ if_
+                      (inputs.char_data >: bank_mem.read_prev_val)
+                      [ pairs_write_data <-- of_int 11 ~width:4
+                      ; pairs_write_enable <-- vdd
+                      ]
+                      [ pairs_write_enable <-- gnd ]
+                  ]
+                  [ if_
+                      (inputs.char_data >: bank_mem.read_val)
+                      [ pairs_write_data <-- of_int 11 ~width:4
+                      ; pairs_write_enable <-- vdd
+                      ]
+                      [ pairs_write_enable <-- gnd ]
+                  ]
               ] )
           ; ( Update_buffer
             , [ ready <-- vdd

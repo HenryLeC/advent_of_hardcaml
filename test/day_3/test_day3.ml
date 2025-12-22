@@ -41,7 +41,8 @@ let test_data data =
       Cyclesim.cycle sim;
       while Bits.to_bool !(outputs.ready) |> not do
         Cyclesim.cycle sim
-      done
+      done;
+      if idx mod 101 = 5 then Printf.printf "%d\n" @@ Bits.to_int !(outputs.output)
     in
     (* inputs.reset := vdd;
     Cyclesim.cycle sim; *)
