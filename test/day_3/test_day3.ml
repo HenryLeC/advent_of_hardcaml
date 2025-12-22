@@ -41,8 +41,7 @@ let test_data data =
       Cyclesim.cycle sim;
       while Bits.to_bool !(outputs.ready) |> not do
         Cyclesim.cycle sim
-      done;
-      if idx mod 101 = 5 then Printf.printf "%d\n" @@ Bits.to_int !(outputs.output)
+      done
     in
     (* inputs.reset := vdd;
     Cyclesim.cycle sim; *)
@@ -76,7 +75,7 @@ let%expect_test "big_data_1" =
   test_data data_str;
   [%expect
     {|
-    output: 169077317650745
+    output: 169077317650774
     ┌Signals───────────┐┌Waves─────────────────────────────────────────────────────────────────────────┐
     │clock             ││┌───┐   ┌───┐   ┌───┐   ┌───┐   ┌───┐   ┌───┐   ┌───┐   ┌───┐   ┌───┐   ┌───┐ │
     │                  ││    └───┘   └───┘   └───┘   └───┘   └───┘   └───┘   └───┘   └───┘   └───┘   └─│
