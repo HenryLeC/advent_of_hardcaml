@@ -158,7 +158,7 @@ let calculate_joltage (scope : Scope.t) (inputs : t I.t) =
           ; ( Convert_bcd
             , [ if_
                   (bank_size.value ==:. 0)
-                  [ valid_out <-- vdd ]
+                  [ valid_out <-- vdd; sm.set_next Wait_for_start ]
                   [ bank_size <-- bank_size.value -:. 1
                   ; bank_read_idx <-- of_int ~width:4 12 -: bank_size.value
                   ]
