@@ -133,21 +133,11 @@ let calculate_joltage (scope : Scope.t) (inputs : t I.t) =
                   ; check_increasing <-- vdd
                   ]
               ; if_
-                  overwrote_final.value
-                  [ if_
-                      (inputs.char_data >: bank_mem.read_prev_val)
-                      [ pairs_write_data <-- of_int 11 ~width:4
-                      ; pairs_write_enable <-- vdd
-                      ]
-                      [ pairs_write_enable <-- gnd ]
-                  ]
-                  [ if_
-                      (inputs.char_data >: bank_mem.read_val)
-                      [ pairs_write_data <-- of_int 11 ~width:4
-                      ; pairs_write_enable <-- vdd
-                      ]
-                      [ pairs_write_enable <-- gnd ]
-                  ]
+                  (inputs.char_data
+                   >: mux2 overwrote_final.value bank_mem.read_prev_val bank_mem.read_val
+                  )
+                  [ pairs_write_data <-- of_int 11 ~width:4; pairs_write_enable <-- vdd ]
+                  [ pairs_write_enable <-- gnd ]
               ] )
           ; ( Update_buffer
             , [ ready <-- vdd
